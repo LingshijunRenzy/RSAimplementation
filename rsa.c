@@ -120,6 +120,7 @@ void encrypt_file(const char *plainfile, const char *nfile, const char *efile, c
     }
     fclose(f);
     normalize_hex(buf);
+    mpz_set_str(m, buf, 16);
     // read n
     f = fopen(nfile, "r");
     if (!f)
