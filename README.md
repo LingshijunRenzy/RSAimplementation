@@ -28,8 +28,31 @@ RSAimplementation/
 ## 依赖
 
 - GCC 或兼容的 C 编译器
-- GMP（GNU Multiple Precision Arithmetic Library）
-- pkg-config（可选，用于在 Linux/macOS 上自动检测 GMP）
+- GMP（GNU Multiple Precision Arithmetic Library）及其开发头文件
+- pkg-config（可选，Linux/macOS 上自动检测 GMP）
+
+在 **Linux** 系统上，请确保已安装开发包，例如 Debian/Ubuntu:
+```bash
+sudo apt-get install build-essential libgmp-dev pkg-config
+```
+
+在 **macOS** 上，请使用 Homebrew 安装 GMP：
+```bash
+brew install gmp
+```
+
+**Windows (MSYS2 MinGW64)** (未经测试,仅供参考)：
+  1. 安装 MSYS2：https://www.msys2.org/
+  2. 启动 **MSYS2 MinGW 64-bit** 终端，运行：
+     ```bash
+     pacman -Syu
+     pacman -S mingw-w64-x86_64-toolchain mingw-w64-x86_64-gmp pkgconf mingw-w64-x86_64-make
+     ```
+  3. 设置自定义 MinGW64 安装路径（可选，若非默认 `/mingw64`）：
+     ```bash
+     export MINGW_HOME="/path/to/your/mingw64"
+     ```
+  4. 直接执行 `make`，Makefile 会自动读取 `MINGW_HOME` 并编译生成 `e3rsa.exe`。
 
 ## 编译
 
@@ -43,10 +66,10 @@ Makefile 会使用 `pkg-config --cflags --libs gmp` 检测 GMP。若系统无 pk
 
 ## 使用
 
-直接运行可执行文件, 会生成 `p.txt`、`q.txt`、`n.txt`、`e.txt`、`d.txt`， 并放到 `generated_txts`文件夹下。:  
 ```bash
 ./e3rsa
-`
+```
+直接运行可执行文件, 会生成 `p.txt`、`q.txt`、`n.txt`、`e.txt`、`d.txt`， 并放到 `generated_txts`文件夹下。:  
 
 ```bash
 e3rsa -p plainfile -n nfile [-e efile] [-d dfile] -c cipherfile

@@ -1,6 +1,35 @@
 CC = gcc
-CFLAGS = -Wall -O2 $(shell pkg-config --cflags gmp 2>/dev/null) -I/opt/homebrew/include -I/usr/local/include
-LDLIBS = $(shell pkg-config --libs gmp 2>/dev/null) -L/opt/homebrew/lib -L/usr/local/lib -lgmp
+
+UNAME_S := $(shell uname -s)
+ifeq ($(OS),Windows_NT)
+  # Windows (MSYS2 MinGW64), allow custom install via MINGW_HOME
+  ifeq ($(MINGW_HOME),)
+    $(error MINGW_HOME not defined; please set it to your MinGW64 installation prefix)
+  endif
+  HOME_INC := -I$(MINGW_HOME)/include
+  HOME_LIB := -L$(MINGW_HOME)/lib
+else ifeq ($(UNAME_S),Darwin)
+  HOME_INC := -I/opt/homebrew/include -I/usr/local/include
+  HOME_LIB := -L/opt/homebrew/lib -L/usr/local/lib
+else
+  HOME_INC :=
+  HOME_LIB :=
+endif
+
+# Attempt to detect GMP via pkg-config
+GMP_CFLAGS := $(shell pkg-config --cflags gmp 2>/dev/null)
+GMP_LIBS := $(shell pkg-config --libs gmp 2>/dev/null)
+ifeq ($(strip $(GMP_CFLAGS)),)
+  # Fallback include paths if pkg-config not available
+  GMP_CFLAGS := -I/usr/include -I/usr/local/include
+endif
+ifeq ($(strip $(GMP_LIBS)),)
+  # Fallback library paths if pkg-config not available
+  GMP_LIBS := -L/usr/lib -L/usr/local/lib -lgmp
+endif
+
+CFLAGS = -Wall -O2 $(GMP_CFLAGS) $(HOME_INC)
+LDLIBS = $(GMP_LIBS) $(HOME_LIB) -lgmp
 
 TARGET = e3rsa
 

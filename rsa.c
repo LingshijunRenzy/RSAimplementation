@@ -107,19 +107,48 @@ void encrypt_file(const char *plainfile, const char *nfile, const char *efile, c
     FILE *f;
     // read plaintext
     f = fopen(plainfile, "r");
-    fscanf(f, "%s", buf);
+    if (!f)
+    {
+        perror("fopen plaintext");
+        exit(EXIT_FAILURE);
+    }
+    if (fscanf(f, "%1023s", buf) != 1)
+    {
+        fprintf(stderr, "Failed to read plaintext\n");
+        fclose(f);
+        exit(EXIT_FAILURE);
+    }
     fclose(f);
     normalize_hex(buf);
-    mpz_set_str(m, buf, 16);
     // read n
     f = fopen(nfile, "r");
-    fscanf(f, "%s", buf);
+    if (!f)
+    {
+        perror("fopen nfile");
+        exit(EXIT_FAILURE);
+    }
+    if (fscanf(f, "%1023s", buf) != 1)
+    {
+        fprintf(stderr, "Failed to read n\n");
+        fclose(f);
+        exit(EXIT_FAILURE);
+    }
     fclose(f);
     normalize_hex(buf);
     mpz_set_str(n, buf, 16);
     // read e
     f = fopen(efile, "r");
-    fscanf(f, "%s", buf);
+    if (!f)
+    {
+        perror("fopen efile");
+        exit(EXIT_FAILURE);
+    }
+    if (fscanf(f, "%1023s", buf) != 1)
+    {
+        fprintf(stderr, "Failed to read e\n");
+        fclose(f);
+        exit(EXIT_FAILURE);
+    }
     fclose(f);
     normalize_hex(buf);
     mpz_set_str(e, buf, 16);
@@ -142,19 +171,49 @@ void sign_file(const char *plainfile, const char *nfile, const char *dfile, cons
     FILE *f;
     // read "plaintext"
     f = fopen(plainfile, "r");
-    fscanf(f, "%s", buf);
+    if (!f)
+    {
+        perror("fopen plaintext");
+        exit(EXIT_FAILURE);
+    }
+    if (fscanf(f, "%1023s", buf) != 1)
+    {
+        fprintf(stderr, "Failed to read plaintext for signature\n");
+        fclose(f);
+        exit(EXIT_FAILURE);
+    }
     fclose(f);
     normalize_hex(buf);
     mpz_set_str(m, buf, 16);
     // read n
     f = fopen(nfile, "r");
-    fscanf(f, "%s", buf);
+    if (!f)
+    {
+        perror("fopen nfile");
+        exit(EXIT_FAILURE);
+    }
+    if (fscanf(f, "%1023s", buf) != 1)
+    {
+        fprintf(stderr, "Failed to read n for signature\n");
+        fclose(f);
+        exit(EXIT_FAILURE);
+    }
     fclose(f);
     normalize_hex(buf);
     mpz_set_str(n, buf, 16);
     // read d
     f = fopen(dfile, "r");
-    fscanf(f, "%s", buf);
+    if (!f)
+    {
+        perror("fopen dfile");
+        exit(EXIT_FAILURE);
+    }
+    if (fscanf(f, "%1023s", buf) != 1)
+    {
+        fprintf(stderr, "Failed to read d for signature\n");
+        fclose(f);
+        exit(EXIT_FAILURE);
+    }
     fclose(f);
     normalize_hex(buf);
     mpz_set_str(d, buf, 16);
