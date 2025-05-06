@@ -1,0 +1,21 @@
+# Ignore build artifacts
+*.o
+$(TARGET)
+
+# Executable
+/e3rsa
+
+# Generated key files and outputs
+generated_txts/
+# Ignore test output files
+txts/*_out.txt
+
+# VS Code settings
+.vscode/
+
+# macOS files
+.DS_Store
+
+# Temporary files
+*~
+*.swp
